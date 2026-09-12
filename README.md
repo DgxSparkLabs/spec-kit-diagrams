@@ -1,7 +1,6 @@
 # Spec Kit Diagrams
 
-Asks the coding agent to add in-section Mermaid diagrams and lookup tables after
-each Spec Kit phase.
+Adds in-section Mermaid diagrams and lookup tables after each Spec Kit phase.
 
 Published under
 [https://github.com/DgxSparkLabs/spec-kit-diagrams](https://github.com/DgxSparkLabs/spec-kit-diagrams).
@@ -11,13 +10,13 @@ Published under
 Spec Kit's spec, plan, and tasks files describe structures the reader otherwise
 rebuilds in their head: a release map, a dependency graph, an entity model, a
 governance gate. This extension does not fork those templates. After
-`/speckit.specify`, `/speckit.plan`, and `/speckit.tasks`, Spec Kit asks whether
-to add diagrams. If you accept, the agent fills marker-delimited blocks from
-`visual-conventions.md`.
+`/speckit.specify`, `/speckit.plan`, and `/speckit.tasks`, Spec Kit instructs
+the agent to run `/speckit.diagrams.render`. The agent fills marker-delimited
+blocks from `visual-conventions.md`.
 
 Hook dispatch is best-effort agent compliance. Core command markdown emits
 `EXECUTE_COMMAND`; emitting that block alone does not run the hook. Pair the
-prompts with the mermaid parse gate described below.
+automatic hooks with the mermaid parse gate described below.
 
 ## Prerequisites
 
@@ -66,9 +65,9 @@ specs stay as-is.
 
 ### After a Spec Kit Phase
 
-Run `/speckit.specify`, `/speckit.plan`, or `/speckit.tasks`. When Spec Kit
-asks whether to add diagrams and tables, accept. The agent authors the visuals
-for that artifact.
+Run `/speckit.specify`, `/speckit.plan`, or `/speckit.tasks`. Spec Kit then
+instructs the agent to run `/speckit.diagrams.render` (`optional: false`). The
+agent authors the visuals for that artifact. To skip, disable the extension.
 
 ### Manual Run
 
@@ -78,7 +77,7 @@ most recently modified matching file under `specs/`.
 
 ## Confidence
 
-Hooks are prompt-level. They are not a guarantee. Pair with CI:
+Hooks are automatic (`optional: false`). They are not a guarantee. Pair with CI:
 
 ```bash
 # Consuming project after install
