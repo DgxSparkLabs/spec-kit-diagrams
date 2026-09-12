@@ -1,0 +1,8 @@
+# Copied to .specify/extensions/diagrams/diagrams-config.yml on install.
+artifacts:
+  spec: true
+  plan: true
+  tasks: true
+  constitution: false
+  checklist: false
+run_validator: true

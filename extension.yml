@@ -1,0 +1,47 @@
+schema_version: "1.0"
+
+extension:
+  id: diagrams
+  name: Spec Kit Diagrams
+  version: "1.0.0"
+  description: "Asks the coding agent to add in-section Mermaid diagrams and lookup tables to spec, plan, and tasks artifacts after each Spec Kit phase."
+  author: DgxSparkLabs
+  repository: https://github.com/DgxSparkLabs/spec-kit-diagrams
+  license: MIT
+  homepage: https://github.com/DgxSparkLabs/spec-kit-diagrams
+
+requires:
+  speckit_version: ">=1.0.0"
+
+provides:
+  commands:
+    - name: speckit.diagrams.render
+      file: commands/speckit.diagrams.render.md
+      description: "Author or refresh in-section diagrams and tables in the current feature's spec, plan, or tasks file"
+  config:
+    - name: diagrams-config.yml
+      template: diagrams-config.template.yml
+      description: "Which artifacts get diagrams and whether to run the mermaid parse gate"
+      required: false
+
+hooks:
+  after_specify:
+    command: speckit.diagrams.render
+    optional: true
+    prompt: "Add diagrams and tables to the spec just written?"
+    description: "Ask the agent to fill spec.md visuals from visual-conventions.md"
+  after_plan:
+    command: speckit.diagrams.render
+    optional: true
+    prompt: "Add diagrams and tables to the plan just written?"
+    description: "Ask the agent to fill plan.md visuals from visual-conventions.md"
+  after_tasks:
+    command: speckit.diagrams.render
+    optional: true
+    prompt: "Add diagrams and tables to the tasks just written?"
+    description: "Ask the agent to fill tasks.md visuals from visual-conventions.md"
+
+tags:
+  - diagrams
+  - mermaid
+  - documentation
