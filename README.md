@@ -30,10 +30,11 @@ Opt-in is per project. Three commands, in this order of simplicity:
 
 ```bash
 # 1. From a tagged GitHub source archive (no extra packaging)
-specify extension add diagrams --from https://github.com/DgxSparkLabs/spec-kit-diagrams/archive/refs/tags/v1.0.0.tar.gz
+specify extension add diagrams --from https://github.com/DgxSparkLabs/spec-kit-diagrams/archive/refs/tags/v1.1.0.tar.gz
 
-# 2. Local clone while developing the extension
-specify extension add diagrams --dev /path/to/spec-kit-diagrams
+# 2. Local clone while developing the extension (specify 1.0.5: the path
+#    is the extension argument; do not put the id before --dev)
+specify extension add --dev /path/to/spec-kit-diagrams
 
 # 3. After adding a catalog you own (search-by-name). Not required for v1.
 specify extension catalog add <catalog-url> --name dgxsparklabs --install-allowed
@@ -43,6 +44,14 @@ specify extension add diagrams
 There is no git-clone install source. `--from` accepts ZIP or tar.gz. GitHub
 tag and branch archives work because the installer finds `extension.yml` under
 the single top-level `<repo>-<ref>/` directory.
+
+Tag `v1.1.0` is the automatic-hook release (`optional: false` on
+`after_specify` / `after_plan` / `after_tasks`). Tag `v1.0.0` still has
+`optional: true`.
+
+`--dev` copies the tree, including `.git` if present. On Windows,
+`specify extension add --force` can fail on locked git objects in that copy.
+Remove `.specify/extensions/diagrams` first, or install from the tag archive.
 
 ### What Install Does
 
@@ -59,7 +68,18 @@ specify extension enable diagrams
 ```
 
 Disabled: hooks are not loaded. Leftover `<!-- SPECKIT DIAGRAM:… -->` blocks in
-specs stay as-is.
+specs stay as-is. Mandatory hooks fire without a confirm prompt; disable is
+the opt-out.
+
+## Co-install
+
+Do not install `ascii-diagram` on the same `after_specify` / `after_plan` /
+`after_tasks` hooks. Both write a picture after each phase; two sources of
+the same comparison is the dual-source trap this extension exists to avoid.
+
+`companion`, `evaluator`, and `pdac` can share those events. Spec Kit runs
+hooks in `.specify/extensions.yml` YAML order and does not sort by
+`priority`, so order is not guaranteed.
 
 ## Two Ways to Use It
 
@@ -88,7 +108,8 @@ bun scripts/validate-mermaid.mjs
 ```
 
 The gate parses every fenced mermaid block and fails `%%{init}%%`. It is the
-deterministic backstop.
+deterministic backstop. If `bun` is missing, the render command reports that
+the parse gate was skipped. Skipped is not a pass.
 
 ## Marker Contract
 
