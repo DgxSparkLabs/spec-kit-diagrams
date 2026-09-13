@@ -1,3 +1,5 @@
 node_modules/
 .DS_Store
 __pycache__/
+docs/research/sessions/*.jsonl
+docs/research/sessions/**/*.jsonl
